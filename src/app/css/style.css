@@ -3,9 +3,43 @@ html, body {
     width: 100%;
     margin: 0;
     padding: 0;
-
+}
 
 body {
     display: flex;
     flex: 1;
+}
+
+.left-bar {
+    border-right: 10px solid rgb(63,81,181);
+    overflow-y: auto;
+    background-color: red;
+}
+
+ar-recursive-children > div > div {
+    background-color: blue;
+}
+
+ar-recursive-children > div > div:hover {
+    background-color: green;
+}
+
+ar-recursive-children div ar-recursive-children div {
+    padding-left: 10px;
+}
+
+ar-recursive-children div > div {
+    padding: 4px 8px;
+    //background-color: #f9f9f9;
+}
+
+
+
+/* Add New x Dialogs */
+
+#docTree {
+    border: 1px solid #bdbdbd;
+    border-radius: 5px;
+
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2)
 }

@@ -1,8 +1,8 @@
-<md-dialog aria-label="Mango (Fruit)">
-    <form ng-cloak>
+<md-dialog aria-label="Add New Location Dialog">
+    <form ng-cloak name="addNewLocationForm">
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Add New Asset</h2>
+                <h2>Add New Location</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="cancel()">
                     <i class="fa fa-close" aria-label="Close dialog"></i>
@@ -10,19 +10,33 @@
             </div>
         </md-toolbar>
 
-        <md-dialog-content>
-            <div class="md-dialog-content">
-
+        <md-dialog-content layout="column" style="padding: 10px;">
+            <div class="input-group mb-3">
+                <input name="locationName" type="text" class="form-control" placeholder="Location" aria-label="Location" required>
+                <div class="input-group-append" ng-if="saving > 0">
+                    <span class="input-group-text">
+                        <div ng-show="saving == 1">
+                            <i class="fa fa-spinner fa-spin fa-fw"></i>
+                        </div>
+                        <div ng-show="saving == 2">
+                            <i class="fa fa-check-circle fa-fw"></i>
+                        </div>
+                    </span>
+                </div>
             </div>
+
+            <span>{{ addNewLocationForm.locationName.$valid }}</span>
+
+            <div id="docTree" flex></div>
         </md-dialog-content>
 
         <md-dialog-actions layout="row">
             <span flex></span>
-            <md-button ng-click="answer('not useful')">
-                Not Useful
+            <md-button ng-click="close()">
+                Close
             </md-button>
-            <md-button ng-click="answer('useful')">
-                Useful
+            <md-button ng-click="add()">
+                Add
             </md-button>
         </md-dialog-actions>
     </form>

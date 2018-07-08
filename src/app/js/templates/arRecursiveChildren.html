@@ -1,4 +1,4 @@
 <div ng-repeat="asset in assets">
-    <div>{{asset.Name}}</div>
-    <ar-recursive-children children="asset.children"></ar-recursive-children>
+    <div ng-click="select(asset)">{{asset.Name}}</div>
+    <ar-recursive-children children="asset.children" select-function="select(asset)"></ar-recursive-children>
 </div>

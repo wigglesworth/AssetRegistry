@@ -1,19 +1,83 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="UTF-8">
     <title>Hello World!</title>
-  </head>
-  <body>
-    <h1>Hello World!</h1>
-    <!-- All of the Node.js APIs are available in this renderer process. -->
-    We are using Node.js <script>document.write(process.versions.node)</script>,
-    Chromium <script>document.write(process.versions.chrome)</script>,
-    and Electron <script>document.write(process.versions.electron)</script>.
 
-    <script>
-      // You can also require other files to run in this process
-      require('./renderer.js')
-    </script>
-  </body>
+    <link rel="stylesheet" href="src/app/css/angular-material.min.css" />
+    <link rel="stylesheet" href="src/app/css/style.css" />
+    <link rel="stylesheet" href="src/app/css/loading.css" />
+    <link rel="stylesheet" href="src/app/css/jsTree/style.min.css" />
+    <link rel="stylesheet" href="src/app/css/font-awesome.min.css" />
+
+
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body class="flex" ng-app="app" ng-controller="mainController" ng-cloak layout="column">
+
+
+<!-- Loading Screen -->
+<div id="loading-screen">
+    <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+    <span class="sr-only">Loading...</span>
+</div>
+
+
+<div id="container" class="flex" layout="column">
+    <md-toolbar class="md-primary">
+        <div class="md-toolbar-tools layout-padding">
+            <h2>JCC Asset Register</h2>
+            <span flex></span>
+            <md-button ng-click='addNewLocation()'><i class="fa fa-plus" style="margin-right: 5px;"></i>Add Location</md-button>
+            <md-button ng-click='addNewAsset()' ng-show="selectedAsset"><i class="fa fa-plus" style="margin-right: 5px;"></i>Add Asset</md-button>
+        </div>
+    </md-toolbar>
+
+    <md-content class="flex layout-row">
+        <div class="flex-20 left-bar">
+            <ar-recursive-children children="assets" select-function="selectAsset(asset)"></ar-recursive-children>
+        </div>
+        <div class="flex">{{selectedAsset}}</div>
+    </md-content>
+</div>
+
+<script>
+    // You can also require other files to run in this process
+    require('./renderer.js')
+    let async = require('async')
+
+    // Only way to get jQuery to load reliably.
+    window.$ = window.jQuery = require('jquery')
+</script>
+
+<!-- Angular Material requires Angular.js Libraries -->
+<script src="src/app/js/angular.min.js"></script>
+<script src="src/app/js/angular-animate.min.js"></script>
+<script src="src/app/js/angular-aria.min.js"></script>
+<script src="src/app/js/angular-messages.min.js"></script>
+
+<script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+
+<!-- Angular Controllers -->
+<script src="src/app/js/mainController.js"></script>
+
+<!-- Angular Material Library -->
+<script src="src/app/js/angular-material.min.js"></script>
+
+<!-- -------- Loading Misc. --------- -->
+    <!-- jsTree -->
+<script src="src/app/js/jsTree/jstree.min.js"></script>
+    <!-- bootstrap -->
+<script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Scripts -->
+<script>
+    const socket = io('http://localhost:8080')
+
+    // Start of callback hell.
+    socket.on('connect', function() {
+        $('#loading-screen').css('display', 'none')
+    })
+</script>
+</body>
 </html>
