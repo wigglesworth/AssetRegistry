@@ -1,0 +1,4 @@
+<div ng-repeat="asset in assets">
+    <div>{{asset.Name}}</div>
+    <ar-recursive-children children="asset.children"></ar-recursive-children>
+</div>
