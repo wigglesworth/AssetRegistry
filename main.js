@@ -81,4 +81,15 @@ io.on('connection', function(socket) {
             return callback(null, data)
         })
     })
+
+    // Adds a new location into the database
+    socket.on('addNewLocation', function(data, callback) {
+        console.log('Adding a new location into database')
+        dbHandler.connection.query('INSERT INTO locations SET ?', data, function(err, res) {
+            if (err) return callback(err)
+
+            console.log(res)
+            callback(null, res)
+        })
+    })
 })

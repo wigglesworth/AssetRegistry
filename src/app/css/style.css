@@ -43,3 +43,8 @@ ar-recursive-children div > div {
 
     box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2)
 }
+
+.modalTree {
+    max-height: 500px;
+    overflow-y: scroll;
+}
