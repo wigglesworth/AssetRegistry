@@ -76,16 +76,35 @@ io.on('connection', function(socket) {
     // Request a list of all assets
     socket.on('requestAssets', function(data, callback) {
         console.log("Assets Requested")
-        dbHandler.connection.query('SELECT * FROM locations WHERE SoftDelete = 0;', function(err, data) {
+        dbHandler.connection.query('SELECT * FROM assets WHERE SoftDelete = 0;', function(err, data) {
             if (err) return callback(err)
             return callback(null, data)
         })
     })
 
+    // Request a list of all locations
+    socket.on('requestLocations', function(data, callback) {
+      console.log('Locations Requested')
+      dbHandler.connection.query('SELECT * FROM assets WHERE SoftDelete = 0 AND AssetTypeID=1;', function(err, data) {
+        if (err) return callback(err)
+        return callback(null, data)
+      })
+    })
+
+    // Requests a list of all asset types
+    socket.on('requestAssetTypes', (data, callback) => {
+      console.log('Asset Types Requested')
+
+      dbHandler.connection.query('SELECT * FROM assettypes WHERE SoftDelete = 0;', (err, data) => {
+        if (err) return callback(err)
+        return callback(null, data)
+      })
+    })
+
     // Adds a new location into the database
     socket.on('addNewLocation', function(data, callback) {
         console.log('Adding a new location into database')
-        dbHandler.connection.query('INSERT INTO locations SET ?', data, function(err, res) {
+        dbHandler.connection.query('INSERT INTO assets SET ?', data, function(err, res) {
             if (err) return callback(err)
 
             console.log(res)

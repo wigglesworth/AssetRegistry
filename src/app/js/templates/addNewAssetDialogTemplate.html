@@ -1,8 +1,8 @@
-<md-dialog aria-label="Add New Location Dialog" flex="40">
-    <form ng-cloak name="addNewLocationForm" ng-submit="add()" novalidate>
+<md-dialog aria-label="Add New Asset Dialog" flex="40">
+    <form ng-cloak name="addNewAssetForm" ng-submit="add()" novalidate>
         <md-toolbar>
             <div class="md-toolbar-tools">
-                <h2>Add New Location</h2>
+                <h2>Add New Asset</h2>
                 <span flex></span>
                 <md-button class="md-icon-button" ng-click="close()">
                     <i class="fa fa-close" aria-label="Close dialog"></i>
@@ -12,7 +12,7 @@
 
         <md-dialog-content layout="column" style="padding: 10px;">
             <div class="input-group mb-3">
-                <input name="locationName" type="text" class="form-control" placeholder="Location" aria-label="Location" ng-model="locationName" required>
+                <input name="assetName" type="text" class="form-control" placeholder="Asset" aria-label="Asset" ng-model="assetName" required>
                 <div class="input-group-append" ng-if="saving > 0">
                     <span class="input-group-text">
                         <div ng-show="saving == 1">
@@ -25,16 +25,21 @@
                 </div>
             </div>
 
+            <div class="form-group">
+                <label>Asset Type</label>
+                <select class="form-control" ng-model="assetTypes.selected" ng-options="asset as asset for asset in assetTypes.options"></select>
+            </div>
+
             <!--<div id="docTree" flex></div>-->
 
             <div
-                class="modalTree locationTree"
+                class="modalTree"
                 data-angular-treeview="true"
-                data-tree-id="addNewLocationTree"
-                data-tree-model="locations"
+                data-tree-id="addNewAssetTree"
+                data-tree-model="assets"
                 data-node-id="ID"
-                data-node-label="Name"
-                data-node-custom-class="CustomClass"
+                data-node-label="Asset"
+                data-node-class="AssetType"
                 data-node-children="children"></div>
 
         </md-dialog-content>
@@ -44,7 +49,7 @@
             <md-button ng-click="close()">
                 Close
             </md-button>
-            <md-button ng-click="add()" ng-disabled="!addNewLocationForm.locationName.$valid || saving">
+            <md-button ng-click="add()" ng-disabled="!addNewAssetForm.locationName.$valid || saving">
                 Add
             </md-button>
         </md-dialog-actions>

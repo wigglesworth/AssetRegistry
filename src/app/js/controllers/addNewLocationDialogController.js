@@ -26,7 +26,7 @@ angular.module('app').controller('addNewLocationDialogController', ['$scope', '$
         // Get Selected Node
         if (!$scope.addNewLocationTree.currentNode) return
 
-        let newLocation = { 'ParentID': $scope.addNewLocationTree.currentNode.ID, 'Name': $scope.locationName, 'SoftDelete': 0 }
+        let newLocation = { 'ParentID': $scope.addNewLocationTree.currentNode.ID, 'Asset': $scope.locationName, 'AssetType': 'Location', 'SoftDelete': 0 }
 
         console.log(newLocation)
 
@@ -50,7 +50,7 @@ angular.module('app').controller('addNewLocationDialogController', ['$scope', '$
     }
 
     $scope.refreshLocations = function(callback) {
-        socket.emit('requestAssets', '', (err, data) => {
+        socket.emit('requestLocations', '', (err, data) => {
             if (err) return console.error(err)
 
             let treeData = data.map(function(item) {

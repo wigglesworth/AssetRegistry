@@ -39,7 +39,7 @@ angular.module('app', ['ngMaterial', 'ngMessages', 'angularTreeview']).controlle
             templateUrl: './src/app/js/templates/addNewLocationDialogTemplate.html',
             targetEvent: ev,
             locals: {
-                selectedNodeID: ($scope.selectedAsset) ? $scope.selectedAsset.ID : 1a
+                selectedNodeID: ($scope.selectedAsset) ? $scope.selectedAsset.ID : 1
             },
             parent: angular.element(document.body),
             clickOutsideToClose:true

@@ -1,9 +1,11 @@
-angular.module('app').controller('addNewLocationDialogController', ['$scope', '$mdDialog', 'selectedNodeID', function($scope, $mdDialog, selectedNodeID) {
+angular.module('app').controller('addNewAssetDialogController', ['$scope', '$mdDialog', 'selectedNodeID', function($scope, $mdDialog, selectedNodeID) {
 
     $scope.selectedNodeID = 0
-    $scope.locationName = ""
-    $scope.locations = []
-    $scope.addNewLocationTree = {}
+    $scope.assetName = ""
+    $scope.assets = []
+    $scope.assetTypes = {}
+    $scope.assetTypesMap = {}
+    $scope.addNewAssetTree = {}
 
     $scope.close = function() {
         $mdDialog.hide()
@@ -22,15 +24,15 @@ angular.module('app').controller('addNewLocationDialogController', ['$scope', '$
         // Form Validation Complete and Correct
 
         // Get Selected Node
-        if (!$scope.addNewLocationTree.currentNode) return
+        if (!$scope.addNewAssetTree.currentNode) return
 
-        let newLocation = { 'ParentID': $scope.addNewLocationTree.currentNode.ID, 'Name': $scope.locationName, 'SoftDelete': 0 }
+        let newAsset = { 'ParentID': $scope.addNewAssetTree.currentNode.ID, 'AssetTypeID': $scope.assetTypes.selected.ID || 1, 'Name': $scope.assetName, 'SoftDelete': 0 }
 
-        console.log(newLocation)
+        console.log(newAsset)
 
         $scope.saving = 1
 
-        socket.emit('addNewLocation', newLocation, function(err) {
+        socket.emit('addNewAsset', newAsset, function(err) {
             if (err) {
                 console.error(err)
                 $scope.saving = 0
@@ -39,38 +41,57 @@ angular.module('app').controller('addNewLocationDialogController', ['$scope', '$
 
             $scope.saving = 2
 
-            $scope.refreshLocations(function() {
+            $scope.refreshAssets(function() {
                 $scope.saving = 0
-                $scope.locationName = ''
+                $scope.assetName = ''
                 if (!$scope.$$phase) $scope.$digest()
             })
         })
     }
 
-    $scope.refreshLocations = function(callback) {
+    $scope.requestAssetTypes = function(callback) {
+        socket.emit('requestAssetTypes', '', (err, data) => {
+            if (err) return console.error(err)
+
+            console.log(data)
+
+            $scope.assetTypes = {selected: data[0], options: data}
+            $scope.assetTypesMap = $scope.assetTypes.options.reduce((map, option) => {
+                map[option.ID] = option
+
+                return map
+            }, {})
+
+            $scope.$digest()
+
+            if (callback) callback()
+        })
+    }
+
+    $scope.refreshAssets = function(callback) {
         socket.emit('requestAssets', '', (err, data) => {
             if (err) return console.error(err)
 
             let treeData = data.map(function(item) {
-                if ($scope.addNewLocationTree.currentNode && $scope.addNewLocationTree.currentNode.ID && $scope.addNewLocationTree.currentNode.ID === item.ID) {
-                    $scope.selectedNode = $scope.addNewLocationTree.currentNode
+                if ($scope.addNewAssetTree.currentNode && $scope.addNewAssetTree.currentNode.ID && $scope.addNewAssetTree.currentNode.ID === item.ID) {
+                    $scope.selectedNode = $scope.addNewAssetTree.currentNode
                     item.selected = 'selected'
-                } else if (!$scope.addNewLocationTree || !$scope.addNewLocationTree.currentNode || !$scope.addNewLocationTree.currentNode.ID) {
+                } else if (!$scope.addNewAssetTree || !$scope.addNewAssetTree.currentNode || !$scope.addNewAssetTree.currentNode.ID) {
                     if ((!selectedNodeID && item.ID === 1) || item.ID === selectedNodeID) item.selected = 'selected'
                 }
 
-                item.CustomClass = 'location'
+                item.AssetType = String($scope.assetTypesMap[item.AssetTypeID].AssetType || 'No Asset Type').toLowerCase()
 
                 return item
             })
 
-            $scope.locations = unflatten(treeData)
+            $scope.assets = unflatten(treeData)
 
             data.forEach(function(item) {
-                if (item.selected === 'selected') $scope.addNewLocationTree.currentNode = item
+                if (item.selected === 'selected') $scope.addNewAssetTree.currentNode = item
             })
 
-            console.log('Locations updated.')
+            console.log('Assets updated.')
 
             $scope.$digest()
 
@@ -78,8 +99,8 @@ angular.module('app').controller('addNewLocationDialogController', ['$scope', '$
         });
     }
 
-
-
-    $scope.refreshLocations()
-
+    // Has to be done first
+    $scope.requestAssetTypes(() => {
+        $scope.refreshAssets()
+    })
 }])

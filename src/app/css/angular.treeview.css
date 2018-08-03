@@ -44,11 +44,11 @@ div[data-tree-model] li .normal {
   background-repeat: no-repeat;
 }
 
-div[data-tree-model].locationTree li .normal {
+div[data-tree-model] li .normal.location {
   background-image: url("../img/folder-closed.png");
 }
 
-div[data-tree-model].assetTree li .normal {
+div[data-tree-model] li .normal:not(.location) {
   background-image: url("../img/file.png");
 }
 
